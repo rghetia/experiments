@@ -19,12 +19,15 @@ package main
 import (
 	"log"
 	"math/rand"
+        "os"
 	"net"
 	"net/http"
 	"time"
 
 	"context"
-	"go.opencensus.io/examples/exporter"
+        "contrib.go.opencensus.io/exporter/stackdriver"
+        "contrib.go.opencensus.io/exporter/stackdriver/monitoredresource"
+//	"go.opencensus.io/examples/exporter"
 	pb "github.com/rghetia/experiments/grpc/proto"
 	"go.opencensus.io/plugin/ocgrpc"
 	"go.opencensus.io/stats/view"
@@ -56,7 +59,24 @@ func main() {
 
 	// Register stats and trace exporters to export
 	// the collected data.
-	view.RegisterExporter(&exporter.PrintExporter{})
+	// view.RegisterExporter(&exporter.PrintExporter{})
+        exporter, err := stackdriver.NewExporter(stackdriver.Options{
+                ProjectID:         os.Getenv("GCP_PROJECT_ID"), // Google Cloud Console project ID for stackdriver.
+                MonitoredResource: monitoredresource.Autodetect(),
+        })
+        if err != nil {
+                log.Fatal(err)
+        }
+        view.RegisterExporter(exporter)
+        trace.RegisterExporter(exporter)
+
+        // Set reporting period to report data at 60 seconds.
+        // The recommended reporting period by Stackdriver Monitoring is >= 1 minute:
+        // https://cloud.google.com/monitoring/custom-metrics/creating-metrics#writing-ts.
+        trace.ApplyConfig(trace.Config{DefaultSampler: trace.AlwaysSample()})
+
+        view.SetReportingPeriod(60 * time.Second)
+
 
 	// Register the views to collect server request count.
 	if err := view.Register(ocgrpc.DefaultServerViews...); err != nil {

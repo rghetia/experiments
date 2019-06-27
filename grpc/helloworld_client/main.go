@@ -27,6 +27,7 @@ import (
 	"go.opencensus.io/plugin/ocgrpc"
 	"go.opencensus.io/stats/view"
 	"google.golang.org/grpc"
+        "go.opencensus.io/trace"
 )
 
 const (
@@ -38,6 +39,8 @@ func main() {
 	// Register stats and trace exporters to export
 	// the collected data.
 	// view.RegisterExporter(&exporter.PrintExporter{})
+        trace.ApplyConfig(trace.Config{DefaultSampler: trace.AlwaysSample()})
+
         exporter, err := stackdriver.NewExporter(stackdriver.Options{
                 ProjectID:         os.Getenv("GCP_PROJECT_ID"), // Google Cloud Console project ID for stackdriver.
                 MonitoredResource: monitoredresource.Autodetect(),
@@ -46,6 +49,7 @@ func main() {
                 log.Fatal(err)
         }
         view.RegisterExporter(exporter)
+        trace.RegisterExporter(exporter)
 
         // Set reporting period to report data at 60 seconds.
         // The recommended reporting period by Stackdriver Monitoring is >= 1 minute:
