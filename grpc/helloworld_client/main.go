@@ -39,7 +39,7 @@ func main() {
 	// the collected data.
 	view.RegisterExporter(&exporter.PrintExporter{})
         exporter, err := stackdriver.NewExporter(stackdriver.Options{
-                ProjectID:         "opencensus-microservices-demo", // Google Cloud Console project ID for stackdriver.
+                ProjectID:         os.Getenv("GCP_PROJECT_ID"), // Google Cloud Console project ID for stackdriver.
                 MonitoredResource: monitoredresource.Autodetect(),
         })
         if err != nil {
