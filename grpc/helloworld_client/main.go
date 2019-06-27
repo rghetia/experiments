@@ -22,7 +22,7 @@ import (
 	"context"
         "contrib.go.opencensus.io/exporter/stackdriver"
         "contrib.go.opencensus.io/exporter/stackdriver/monitoredresource"
-	"go.opencensus.io/examples/exporter"
+	//"go.opencensus.io/examples/exporter"
 	pb "github.com/rghetia/experiments/grpc/proto"
 	"go.opencensus.io/plugin/ocgrpc"
 	"go.opencensus.io/stats/view"
@@ -37,7 +37,7 @@ const (
 func main() {
 	// Register stats and trace exporters to export
 	// the collected data.
-	view.RegisterExporter(&exporter.PrintExporter{})
+	// view.RegisterExporter(&exporter.PrintExporter{})
         exporter, err := stackdriver.NewExporter(stackdriver.Options{
                 ProjectID:         os.Getenv("GCP_PROJECT_ID"), // Google Cloud Console project ID for stackdriver.
                 MonitoredResource: monitoredresource.Autodetect(),
@@ -74,11 +74,11 @@ func main() {
 	}
 //	view.SetReportingPeriod(time.Second)
 	for {
-		r, err := c.SayHello(context.Background(), &pb.HelloRequest{Name: name})
+		_, err := c.SayHello(context.Background(), &pb.HelloRequest{Name: name})
 		if err != nil {
 			log.Printf("Could not greet: %v", err)
 		} else {
-			log.Printf("Greeting: %s", r.Message)
+			//log.Printf("Greeting: %s", r.Message)
 		}
 		time.Sleep(2 * time.Second)
 	}
