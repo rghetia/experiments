@@ -23,7 +23,7 @@ import (
         "contrib.go.opencensus.io/exporter/stackdriver"
         "contrib.go.opencensus.io/exporter/stackdriver/monitoredresource"
 	"go.opencensus.io/examples/exporter"
-	pb "rghetia/experiments/grpc/proto"
+	pb "github.com/rghetia/experiments/grpc/proto"
 	"go.opencensus.io/plugin/ocgrpc"
 	"go.opencensus.io/stats/view"
 	"google.golang.org/grpc"

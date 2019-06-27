@@ -1,4 +1,4 @@
-module experiments/grpc
+module github.com/rghetia/experiments/grpc
 
 go 1.12
 

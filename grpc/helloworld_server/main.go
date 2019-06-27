@@ -25,7 +25,7 @@ import (
 
 	"context"
 	"go.opencensus.io/examples/exporter"
-	pb "rghetia/experiments/grpc/proto"
+	pb "github.com/rghetia/experiments/grpc/proto"
 	"go.opencensus.io/plugin/ocgrpc"
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/trace"
